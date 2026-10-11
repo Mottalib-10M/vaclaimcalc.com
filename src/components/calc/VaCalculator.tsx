@@ -78,7 +78,7 @@ export default function VaCalculator({ mode = 'full', methodHref = '/en/method/'
   const tdiu = ratingsUsed.length > 0 && finalRating < 100 && tdiuSchedular(comb.bilateral ? comb.order : ratingsUsed, finalRating);
 
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form onSubmit={(e) => e.preventDefault()}>
         {mode !== 'rates' && (
           <fieldset>
@@ -103,7 +103,7 @@ export default function VaCalculator({ mode = 'full', methodHref = '/en/method/'
         {mode !== 'combined' && (
           <fieldset className="mt-5">
             <legend className="mb-2 text-sm font-semibold text-navy-900">Dependents (they count from a 30% rating)</legend>
-            <div className="grid gap-x-5 gap-y-4 sm:grid-cols-3">
+            <div className="grid gap-x-5 gap-y-4 sm:grid-cols-3 lg:grid-cols-2">
               <Toggle id={`${p}-s`} label="Married?" value={spouse} onChange={setSpouse} options={yn} />
               <SelectField id={`${p}-k`} label="Children under 18" value={String(kids)} onChange={(v) => setKids(Number(v))} options={count(10)} />
               <SelectField id={`${p}-sc`} label="Children 18 to 23 in school" value={String(school)} onChange={(v) => setSchool(Number(v))} options={count(6)} />

@@ -33,7 +33,7 @@ export function PayChart({ methodHref = '/en/method/', idPrefix = 'pc', grade = 
   const cells = row.map((v, i) => [colLabel(i), v == null ? '–' : usd2(v)] as [string, string]).filter((_, i) => row[i] != null);
   const sel = colIndex(y);
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${idPrefix}-g`} label="Pay grade" value={g} onChange={setG} options={GRADE_OPTS} />
         <NumberField id={`${idPrefix}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} help="Pay entry base date to today, full years only." />
@@ -64,7 +64,7 @@ export function PayCalculator({ methodHref = '/en/method/', idPrefix = 'mp', gra
   const food = bas(g);
   const total = base + housing + food;
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${idPrefix}-g`} label="Pay grade" value={g} onChange={setG} options={GRADE_OPTS} />
         <NumberField id={`${idPrefix}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} />
@@ -95,8 +95,8 @@ export function BahCalculator({ methodHref = '/en/method/', idPrefix = 'bah', gr
   const other = code ? bahRate(code, g, dep !== '1') : null;
   const rows: Array<[string, string]> = code ? BAH_GRADES.filter((x) => x === g || ['E-1', 'E-4', 'E-5', 'E-6', 'E-7', 'E-9', 'W-2', 'O-1', 'O-3', 'O-4', 'O-5', 'O-6'].includes(x)).map((x) => [`${x}${x === g ? ' (you)' : ''}`, `${usd(bahRate(code, x, true) ?? 0)} with · ${usd(bahRate(code, x, false) ?? 0)} without`]) : [];
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-3" onSubmit={(e) => e.preventDefault()}>
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-3 lg:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
           <label htmlFor={`${idPrefix}-z`} className="mb-1 block text-sm font-medium text-navy-700">Duty station ZIP code</label>
           <input id={`${idPrefix}-z`} type="text" inputMode="numeric" maxLength={5} value={z} placeholder={`e.g. ${zip}`} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
@@ -130,7 +130,7 @@ export function BahTable({ idPrefix = 'bt' }: Common) {
         </div>
         <SelectField id={`${idPrefix}-g`} label="Pay grade" value={g} onChange={setG} options={GRADE_OPTS} />
       </form>
-      <div className="mt-4 max-h-[28rem] overflow-y-auto">
+      <div data-resultat className="mt-4 max-h-[28rem] overflow-y-auto">
         <table className="journal w-full text-sm"><thead><tr><th scope="col" className="px-2 py-2 text-left">Housing area</th><th scope="col" className="px-2 py-2 text-right">With dependents</th><th scope="col" className="px-2 py-2 text-right">Without</th></tr></thead>
           <tbody>{list.map((m) => <tr key={m.code}><td className="border-b border-navy-100 px-2 py-1.5 text-navy-800">{mhaLabel(m.code)}</td><td className="tabular-nums border-b border-navy-100 px-2 py-1.5 text-right">{usd(bahRate(m.code, g, true) ?? 0)}</td><td className="tabular-nums border-b border-navy-100 px-2 py-1.5 text-right">{usd(bahRate(m.code, g, false) ?? 0)}</td></tr>)}</tbody>
         </table>

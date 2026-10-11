@@ -10,10 +10,10 @@ import NumberField from '../ui/NumberField';
 import SelectField from '../ui/SelectField';
 import { getSpec } from '../../lib/mini-specs';
 
-interface Props { kind: string; lang?: string; href?: string }
+interface Props { kind: string; lang?: string; href?: string; arg?: string }
 
-export default function MiniSim({ kind, lang = 'en', href }: Props) {
-  const spec = getSpec(kind, lang);
+export default function MiniSim({ kind, lang = 'en', href, arg }: Props) {
+  const spec = useMemo(() => getSpec(kind, lang, arg), [kind, lang, arg]);
   const [v, setV] = useState<Record<string, number>>(() => Object.fromEntries(spec.inputs.map((i) => [i.id, i.def])));
   const out = useMemo(() => spec.run(v), [v, spec]);
   const set = (id: string) => (x: number) => setV((o) => ({ ...o, [id]: x }));
@@ -26,7 +26,7 @@ export default function MiniSim({ kind, lang = 'en', href }: Props) {
             ? <SelectField key={i.id} id={`m-${kind}-${i.id}`} label={i.label} value={String(v[i.id])} onChange={(x) => set(i.id)(Number(x))} options={i.options} />
             : <NumberField key={i.id} id={`m-${kind}-${i.id}`} label={i.label} value={v[i.id]} onChange={set(i.id)} unit={i.unit} max={i.max} decimals={i.decimals} />)}
         </form>
-        <div aria-live="polite" className="rounded-lg bg-navy-50 p-4">
+        <div aria-live="polite" data-resultat className="rounded-lg bg-navy-50 p-4">
           <p className="text-sm font-medium text-navy-600">{out.head[0]}</p>
           <p className="tabular-nums mt-1 text-3xl font-bold text-navy-900">{out.head[1]}</p>
           <table className="mt-3 w-full text-sm"><tbody className="divide-y divide-navy-200">

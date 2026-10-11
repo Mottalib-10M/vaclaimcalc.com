@@ -47,13 +47,13 @@ export function RetireCalculator({ methodHref = '/en/method/', idPrefix = 'rt', 
   const c = rt > 0 ? concurrent({ retiredPay: r.monthly, rating: rt, years: y }) : null;
   const p = idPrefix;
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${p}-pl`} label="Retirement system" value={pl} onChange={(v) => setPl(v as Plan)} options={PLANS} />
         <SelectField id={`${p}-g`} label="Grade at retirement" value={g} onChange={setG} options={RET_GRADES} />
         <NumberField id={`${p}-y`} label="Years of service" value={y} onChange={setY} unit="yrs" max={45} help="20 for an active-duty retirement." />
         <NumberField id={`${p}-m`} label="Extra months" value={mo} onChange={setMo} unit="mo" max={11} />
-        <NumberField id={`${p}-h`} label="Your high-36 average (optional)" value={own} onChange={setOwn} unit="$" max={30000} help="Leave empty to use the 2026 basic pay of the grade." />
+        <NumberField id={`${p}-h`} label="Your high-36 average (optional)" value={own} onChange={setOwn} unit="$" max={30000} help="Leave empty to use the 2026 basic pay of the grade." className="sm:col-span-2" />
         <SelectField id={`${p}-va`} label="VA combined rating" value={String(rt)} onChange={(v) => setRt(Number(v))} options={RATING_OPTS} />
       </form>
       <Result label={`Gross retired pay per month (${pl === 'brs' ? 'BRS' : pl === 'redux' ? 'REDUX' : 'High-3'})`} value={usd2(r.monthly)} sub={`${pc(r.multiplierPct)} of ${usd2(high36)}; ${usd(r.annual)} a year before taxes and SBP.`} methodHref={methodHref}
@@ -87,7 +87,7 @@ export function FersCalculator({ methodHref = '/en/method/', idPrefix = 'fe' }: 
   const dep = militaryDeposit(earned);
   const gain = r.annual - without.annual;
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <NumberField id={`${idPrefix}-h`} label="High-3 average salary" value={h3} onChange={setH3} unit="$/yr" max={500000} help="Highest 3 consecutive years of basic pay." />
         <NumberField id={`${idPrefix}-c`} label="Civilian FERS years" value={civ} onChange={setCiv} unit="yrs" max={50} />
@@ -120,7 +120,7 @@ export function GiCalculator({ methodHref = '/en/method/', idPrefix = 'gi', zip 
   const r = giBill({ tier, school, tuition, bahE5, credits, online: online === '1', months: 9 });
   const p = idPrefix;
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <NumberField id={`${p}-days`} label="Days of active duty after 9/10/2001" value={days} onChange={setDays} unit="days" max={20000} help="1,095 days (36 months) for 100%." />
         <Toggle id={`${p}-ph`} label="Purple Heart or discharged for a service-connected disability?" value={ph} onChange={setPh} options={yn} />
@@ -159,7 +159,7 @@ export function TspCalculator({ methodHref = '/en/method/', idPrefix = 'ts', gra
   const gov = brs === '1' ? (annual * m.total) / 100 : 0;
   const p = idPrefix;
   return (
-    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
+    <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${p}-g`} label="Pay grade" value={g} onChange={setG} options={GRADES.map((x) => ({ value: x, label: x }))} />
         <NumberField id={`${p}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} />

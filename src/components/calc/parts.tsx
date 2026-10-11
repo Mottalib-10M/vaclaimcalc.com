@@ -1,5 +1,5 @@
 /** Shared pieces of the calculators: result card, detail rows, share and print bar, locked state field. */
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { formatMoney, formatNumber } from '../../lib/format';
 
 export const usd = (n: number) => formatMoney(Math.round(n), 0);
@@ -27,8 +27,21 @@ export function Rows({ rows }: { rows: Array<[string, string]> }) {
 export function Result({ label, value, sub, children, methodHref, note }: { label: string; value: string; sub?: string; children?: ReactNode; methodHref: string; note: string }) {
   const [copied, setCopied] = useState(false);
   const copy = () => { navigator.clipboard?.writeText(window.location.href).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }); };
+  // Téléphone (RECETTE §5, 2026-10-11) : tant que le formulaire est à l'écran et le résultat en dessous,
+  // une barre collante en bas montre le chiffre clé ; un toucher fait descendre jusqu'au détail.
+  const ref = useRef<HTMLDivElement>(null);
+  const [bar, setBar] = useState(false);
+  useEffect(() => {
+    const el = ref.current; const calc = el?.closest('.rechner');
+    if (!el || !calc || typeof IntersectionObserver === 'undefined') return;
+    let calcIn = false; let resIn = false;
+    const o = new IntersectionObserver((es) => { for (const e of es) { if (e.target === el) resIn = e.isIntersecting; else calcIn = e.isIntersecting; } setBar(calcIn && !resIn); });
+    o.observe(el); o.observe(calc);
+    return () => o.disconnect();
+  }, []);
   return (
-    <div aria-live="polite" className="mt-6 rounded-xl bg-accent-50 p-4 sm:p-5">
+    <>
+    <div ref={ref} aria-live="polite" data-resultat className="mt-6 scroll-mt-20 rounded-xl bg-accent-50 p-4 sm:p-5 lg:sticky lg:top-20 lg:mt-0">
       <p className="text-sm font-medium text-navy-700">{label}</p>
       <p className="tabular-nums mt-1 text-4xl font-bold text-navy-900">{value}</p>
       {sub && <p className="mt-1 text-sm text-navy-700">{sub}</p>}
@@ -39,6 +52,13 @@ export function Result({ label, value, sub, children, methodHref, note }: { labe
         <button type="button" onClick={() => window.print()} className="rounded-lg border border-navy-300 bg-white px-3 py-1.5 font-medium text-navy-800 hover:bg-navy-50">Print</button>
       </div>
     </div>
+    {bar && (
+      <div aria-hidden="true" data-chrome onClick={() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="fixed inset-x-0 bottom-0 z-40 flex cursor-pointer items-center justify-between gap-3 border-t border-accent-200 bg-accent-50 px-4 py-3 shadow-lg lg:hidden">
+        <span className="min-w-0 truncate text-sm text-navy-700">{label}</span>
+        <span className="tabular-nums shrink-0 text-xl font-bold text-navy-900">{value} ↓</span>
+      </div>
+    )}
+    </>
   );
 }
 
