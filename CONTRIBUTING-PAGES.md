@@ -1,4 +1,4 @@
-# Écrire ou étoffer une page de « VA & Military Pay Calc »
+# Écrire ou étoffer une page de « VA Claim Calc »
 
 Notice pour les agents qui écrivent une page. À lire en entier avant d'écrire, avec
 `~/Documents/GitHub/RECETTE-SITE.md` (§0, §6, §6.5, §7, §9, §9.3, §11, §17.4, §21, §26).
@@ -70,7 +70,7 @@ pas de chiffres d'effectifs des bases, pas d'histoire des noms de bases sans sou
 ## Contrôles
 
 ```bash
-cd ~/Documents/GitHub/a-publier/Mottalib-10M/us-military-va
+cd ~/Documents/GitHub/a-publier/Mottalib-10M/vaclaimcalc.com
 PAGE_FILES=<id>,<id> ALLOW_PLANNED=1 npx vitest run tests/pages.test.ts   # une page
 npx vitest run                                                           # tout
 npm run build && python3 scripts/check-seo.py . && python3 scripts/check-unique.py dist && python3 scripts/check-trame.py .

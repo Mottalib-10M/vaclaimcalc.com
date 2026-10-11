@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /*?*
 
-Sitemap: https://us-military-va.example/sitemap-index.xml
+Sitemap: https://vaclaimcalc.com/sitemap-index.xml

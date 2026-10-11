@@ -10,14 +10,14 @@
  "founded": "2026",
  "volumes": "/Users/mottalib/Documents/GitHub/reports/volumes-2026-10-10b/topic-us-military-va.csv",
  "volumesNote": "Environ 318 000 recherches/mois mesurées au Keyword Planner (plan US 1441667700), hors « va disability rates/calculator » non chiffrés ; site validé par l'éditeur le 2026-10-11.",
- "folder": "us-military-va",
+ "folder": "vaclaimcalc.com",
  "outDir": "a-publier/Mottalib-10M",
- "url": "https://us-military-va.example",
+ "url": "https://vaclaimcalc.com",
  "locales": [
   "en"
  ],
  "names": {
-  "en": "VA & Military Pay Calc"
+  "en": "VA Claim Calc"
  },
  "langTags": {
   "en": "en-US"
@@ -36,18 +36,18 @@
  "authorDesc": {
   "en": "(rewritten in src/data/site-config.ts)"
  },
- "email": "contact@us-military-va.example",
+ "email": "contact@vaclaimcalc.com",
  "indexnow": "7c1e9a4f2b8d4e6a9f3c5b7d1e2a4c6f",
- "shortName": "VA & Mil Pay",
+ "shortName": "VA Claim Calc",
  "description": "VA disability calculator with the 2026 rates and dependents, 2026 military pay chart, BAH by ZIP code, military retirement, CRDP, GI Bill and TSP calculators.",
  "port": 4408,
  "og": [
   {
    "file": "og-en.png",
-   "title": "VA & Military Pay Calc",
+   "title": "VA Claim Calc",
    "subtitle": "",
    "badge": "2026",
-   "brand": "VA & Military Pay Calc"
+   "brand": "VA Claim Calc"
   }
  ],
  "lastUpdated": "2026-10-11",

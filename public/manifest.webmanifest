@@ -1,6 +1,6 @@
 {
- "name": "VA & Military Pay Calc",
- "short_name": "VA & Mil Pay",
+ "name": "VA Claim Calc",
+ "short_name": "VA Claim Calc",
  "description": "VA disability calculator with the 2026 rates and dependents, 2026 military pay chart, BAH by ZIP code, military retirement, CRDP, GI Bill and TSP calculators.",
  "start_url": "/en/",
  "display": "standalone",

@@ -1,6 +1,6 @@
 /** Configuration centrale du site (générée par new-site.py). */
-export const SITE_URL = "https://us-military-va.example";
-export const SITE_NAMES: Record<string, string> = {"en": "VA & Military Pay Calc"};
+export const SITE_URL = "https://vaclaimcalc.com";
+export const SITE_NAMES: Record<string, string> = {"en": "VA Claim Calc"};
 export const LANG_TAGS: Record<string, string> = {"en": "en-US"};
 export const OG_LOCALES: Record<string, string> = {"en": "en_US"};
 export const LOCALE_TAG = 'en-US';
@@ -16,7 +16,7 @@ export const AUTHOR_DESC: Record<string, string> = {"en": "Radif Partners writes
  *  themes reellement traites par le site, pas une liste de mots-cles : un sujet
  *  declare ici sans page qui le couvre est une declaration fausse. */
 export const KNOWS_ABOUT: Record<string, string[]> = {"en": ["VA disability compensation rates", "VA combined ratings (38 CFR 4.25)", "Bilateral factor (38 CFR 4.26)", "Military basic pay tables", "Basic Allowance for Housing", "Military retirement (High-3, BRS, REDUX)", "Concurrent Retirement and Disability Pay", "Combat-Related Special Compensation", "Post-9/11 GI Bill", "Thrift Savings Plan"]};
-export const CONTACT_EMAIL = "contact@us-military-va.example";
+export const CONTACT_EMAIL = "contact@vaclaimcalc.com";
 export const THEME_COLOR = '#5B6B2F';
 export const LOGO_SYMBOL = 'VA%';
 export const BING_VERIFY_CODE = '';
