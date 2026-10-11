@@ -1,5 +1,5 @@
 import { definePage } from '../../lib/page-types';
-import { P, bah, bahArg, usd, mhaLabel, MHAS, zipsOf } from '../../lib/kit';
+import { P, bah, bahArg, usd, mhaLabel, MHAS, zipsOf, bah25, bahChange, bahShares, BAH_COST_SHARE } from '../../lib/kit';
 const Zs = zipsOf('CA038');
 
 const C = 'CA038';
@@ -39,7 +39,12 @@ ${h.table(['Grade', 'With dependents', 'Without dependents', 'Difference'], G.ma
 <p>Moving between San Diego and an East Coast fleet concentration area shows how much of a sailor's income BAH can be. The same E-5 with a family receives ${usd(bah('VA298', 'E-5'))} in Norfolk, so a transfer from San Diego to Norfolk lowers the housing allowance by ${usd(bah(C, 'E-5') - bah('VA298', 'E-5'))} a month while basic pay does not change. Rents differ in proportion, which is the point of the allowance, but the numbers are worth knowing before you sign a lease that runs past your projected rotation date.</p>
 <p>Officers see the same logic at a higher level: an O-1 with dependents receives ${usd(bah(C, 'O-1'))}, an O-4 ${usd(bah(C, 'O-4'))} and an O-6 ${usd(bah(C, 'O-6'))}, while warrant officers sit between the senior enlisted and the company grade officers.</p>
 <h2>Checking the rate on your LES</h2>
-<p>The Leave and Earnings Statement shows BAH as an entitlement line with the housing area code and your dependency status. If the amount differs from the table, the usual reasons are a status that was not updated after a marriage or a divorce, a member still drawing the rate of a previous station during a permanent change of station, or rate protection from an earlier year. The finance office corrects it with a copy of your orders and the marriage or birth certificate.</p>`,
+<p>The Leave and Earnings Statement shows BAH as an entitlement line with the housing area code and your dependency status. If the amount differs from the table, the usual reasons are a status that was not updated after a marriage or a divorce, a member still drawing the rate of a previous station during a permanent change of station, or rate protection from an earlier year. The finance office corrects it with a copy of your orders and the marriage or birth certificate.</p>
+<h2>2025 to 2026: a flat year in San Diego</h2>
+<p>San Diego is one of the areas where the 2026 table barely moved, and moved down for some grades. The E-5 family rate went from ${usd(bah25(C, 'E-5'))} to ${usd(bah(C, 'E-5'))}, while the O-3 rate rose by a few dollars. Members already stationed here are protected: rate protection keeps the higher 2025 amount for those who were entitled to it on December 31, 2025, as long as they stay in the area with the same status. New arrivals in 2026 receive the published rate.</p>
+${h.table(['Grade', '2025', '2026', 'Change'], ['E-4', 'E-5', 'E-6', 'E-7', 'E-9', 'O-1', 'O-3', 'O-5'].map((g) => { const x = bahChange(C, g); return [g, usd(x.from), usd(x.to), `${x.diff >= 0 ? '+' : '−'}${usd(Math.abs(x.diff))} (${x.pct >= 0 ? '+' : '−'}${Math.abs(x.pct)}%)`]; }), 'Monthly BAH with dependents, DTMO 2025 and 2026 rates.', ['l', 'r', 'r', 'r'])}
+<h2>Rent and utilities in the San Diego rate</h2>
+<p>The DTMO builds each rate from median rents and average utilities for six housing profiles, then subtracts a member cost share of ${BAH_COST_SHARE}%. In San Diego, rent makes up about ${bahShares(C)!.rent}% of the total housing cost and utilities ${bahShares(C)!.utilities}%, one of the highest rent shares of the country, which reflects both expensive rents and a mild climate with small heating and cooling bills.</p>`,
   related: ['bah-camp-pendleton', 'bah-calculator', 'bah-rates', 'military-pay-calculator', 'bah-honolulu'],
   sources: ['dtmoBah', 'dfasBas'],
 });

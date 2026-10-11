@@ -41,6 +41,33 @@ export function steps(grade: string) {
   for (let i = first + 1; i < r.length; i++) if (r[i] != null && r[i] !== r[i - 1]) last = i;
   return { firstCol: colLabel(first), firstPay: r[first] as number, lastCol: colLabel(last), top: r[r.length - 1] as number, lastYears: last === 0 ? 0 : Number(PAY_COLS[last]) };
 }
+/** Rank of a housing area among all areas with a rate, by the with-dependents BAH of a grade (1 = highest). */
+export function rankOf(code: string, grade = 'E-5') {
+  const i = BAH_GRADES.indexOf(grade);
+  const list = MHAS.filter((m) => m.w).sort((a, b) => b.w![i] - a.w![i]);
+  return { rank: list.findIndex((m) => m.code === code) + 1, of: list.length };
+}
+import B25 from '../data/bah-2025.json';
+import BC from '../data/bah-components-2026.json';
+/** 2025 BAH (DTMO PDF) for a grade at an MHA; O-8 to O-10 use the O-7 column of the 2025 file. */
+export function bah25(code: string, grade: string, withDependents = true): number {
+  const g = ['O-8', 'O-9', 'O-10'].includes(grade) ? 'O-7' : grade;
+  const row = (withDependents ? B25.w : B25.wo) as Record<string, number[]>;
+  const v = row[code]?.[B25.grades.indexOf(g)];
+  if (v == null) throw new Error(`No 2025 BAH for ${code} ${grade}`);
+  return v;
+}
+/** Change from 2025 to 2026, in dollars and percent (one decimal). */
+export function bahChange(code: string, grade: string, withDependents = true) {
+  const a = bah25(code, grade, withDependents), b = bah(code, grade, withDependents);
+  return { from: a, to: b, diff: b - a, pct: Math.round(((b - a) / a) * 1000) / 10 };
+}
+/** Rent and utilities as average shares of the total housing cost of an MHA in 2026 (DTMO component breakdown). */
+export function bahShares(code: string) {
+  const v = (BC.mha as Record<string, number[]>)[code];
+  return v ? { rent: v[0], utilities: v[1] } : null;
+}
+export const BAH_COST_SHARE = BC.costSharePct;
 const ZI = decodeZips(Z);
 /** ZIP codes of a housing area in the DTMO 2026 file: count, first and last (5 digits). */
 export function zipsOf(code: string) {
@@ -49,5 +76,5 @@ export function zipsOf(code: string) {
   ZI.mha.forEach((m, k) => { if (m === i) list.push(String(ZI.zips[k]).padStart(5, '0')); });
   return { n: list.length, first: list[0], last: list[list.length - 1] };
 }
-export const KIT = { P, usd, usdx, pct, num, day, listOf, comp, deps, combine, combinedValue, rateCell, aloneRate, basePay, pay, bas, bahRate, mhaLabel, retiredPay, multiplier, concurrent, sbp, fers, giBill, giTier, brsMatch, tspLimit, tspProject, colaPct, bah, bahArg, giAreas, mhaByCode, militaryDeposit, zipsOf, steps };
+export const KIT = { P, usd, usdx, pct, num, day, listOf, comp, deps, combine, combinedValue, rateCell, aloneRate, basePay, pay, bas, bahRate, mhaLabel, retiredPay, multiplier, concurrent, sbp, fers, giBill, giTier, brsMatch, tspLimit, tspProject, colaPct, bah, bahArg, giAreas, mhaByCode, militaryDeposit, zipsOf, steps, rankOf, bah25, bahChange, bahShares };
 export type Kit = typeof KIT;
