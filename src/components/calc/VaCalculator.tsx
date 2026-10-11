@@ -85,9 +85,9 @@ export default function VaCalculator({ mode = 'full', methodHref = '/en/method/'
             <legend className="mb-2 text-sm font-semibold text-navy-900">Your service-connected ratings</legend>
             <div className="space-y-3">
               {rows.map((x, i) => (
-                <div key={i} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto] gap-x-3">
+                <div key={i} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto]">
                   <SelectField id={`${p}-r${i}`} label={`Rating ${i + 1}`} value={String(x.r)} onChange={(v) => setRow(i, { r: Number(v) })} options={RATING_OPTS} />
-                  <SelectField id={`${p}-w${i}`} label="Body part" value={x.where} onChange={(v) => setRow(i, { where: v })} options={WHERE} />
+                  <SelectField id={`${p}-w${i}`} label="Body part" value={x.where} onChange={(v) => setRow(i, { where: v })} options={WHERE} className="col-span-2 order-last sm:order-none sm:col-span-1" />
                   <button type="button" onClick={() => setRows((o) => (o.length > 1 ? o.filter((_, j) => j !== i) : o))} className="row-span-3 mt-6 h-12 self-start rounded-lg border border-navy-300 px-3 text-sm text-navy-700 hover:bg-navy-50" aria-label={`Remove rating ${i + 1}`}>Remove</button>
                 </div>
               ))}
