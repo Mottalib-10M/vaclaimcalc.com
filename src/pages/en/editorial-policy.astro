@@ -1,0 +1,29 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, REVIEW_CYCLE_MONTHS, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+const lang = 'en';
+---
+<PageLayout title={`Editorial policy of ${SITE_NAMES[lang]}: official tables only`} description="Which VA, DFAS, DTMO, eCFR, IRS and OPM documents supply the figures of these veteran and military pay calculators, which sources never do, and how an error gets corrected." lang={lang} noindex={true} breadcrumbs={[{ label: 'Editorial policy' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h1>Editorial and corrections policy</h1>
+    <p>A veteran may decide whether to file for an increase, a family may choose between two duty stations, a retiree may elect CRDP or CRSC on the strength of a number read here. A figure copied from last year's table can cost real money. This page says where every number comes from and what happens when one is wrong.</p>
+    <h2>Who is responsible</h2><p>Content and calculations: {AUTHOR_NAME}, <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>Sources that supply figures</h2>
+    <ul>
+      <li>the Department of Veterans Affairs: compensation, SMC, pension, DIC and Post-9/11 GI Bill rate pages on va.gov;</li>
+      <li>the Code of Federal Regulations (38 CFR Part 4) through the eCFR, for the combined ratings table, the bilateral factor and individual unemployability;</li>
+      <li>DFAS: basic pay tables, BAS, and the retired pay, CRDP and CRSC pages;</li>
+      <li>the Defense Travel Management Office: the BAH ASCII files (rates, housing area names, ZIP code assignments);</li>
+      <li>Title 10 and Title 38 of the United States Code, for retired pay multipliers, concurrent receipt, CRSC, SBP and dependents' amounts;</li>
+      <li>the IRS and the Federal Retirement Thrift Investment Board for TSP limits, OPM for FERS.</li>
+    </ul>
+    <h2>Sources that never supply a number</h2>
+    <p>Other calculators, military news sites, forums, law firm pages and claim consultants can tell us that something changed. They never supply a figure: we go to the government document, and when the two disagree the document wins. When the government site cannot be reached from our location (dfas.mil and travel.dod.mil block foreign connections), we read the archived copy of the official page and keep it with the code.</p>
+    <h2>Review cycle</h2><p>Every figure is re-read at least every {REVIEW_CYCLE_MONTHS} months and on each scheduled change (December 1 for VA rates and retired pay COLA, January 1 for pay, BAS and BAH, August 1 for the GI Bill). A change voted but not yet in force is shown with its date and never applied early.</p>
+    <h2>Corrections</h2>
+    <ol><li>We check the report against the official document.</li><li>We correct the data file or the engine and add a test that reproduces the case.</li><li>The page shows its new reading date.</li></ol>
+    <h2>Independence</h2><p>No law firm, claim consultant, lender, insurer or moving company pays to appear on the site, and no calculator asks for a name, an email or a phone number. If that ever changed, it would be written next to the link concerned.</p>
+    <p>See also the <a href={route('method', lang)}>method page</a>. Policy version: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

@@ -1,0 +1,25 @@
+---
+/** Renders a full calculator as a hydrated island, with the defaults of the page (ToolProps). */
+import VaCalculator from './calc/VaCalculator';
+import { PayChart, PayCalculator, BahCalculator, BahTable } from './calc/PayCalculators';
+import { RetireCalculator, FersCalculator, GiCalculator, TspCalculator } from './calc/RetireCalculators';
+import { route, ROUTES } from '../i18n/routes';
+import type { ToolKind, ToolProps } from '../lib/page-types';
+interface Props extends ToolProps { kind: ToolKind; idPrefix?: string }
+const { kind, idPrefix, grade, years, rating, zip, plan } = Astro.props;
+const methodHref = route('method', 'en');
+const crdpHref = ROUTES.some((r) => r.id === 'crdp') ? route('crdp', 'en') : methodHref;
+const pre = idPrefix ?? kind.slice(0, 4);
+---
+{kind === 'va' && <VaCalculator client:load mode="full" methodHref={methodHref} crdpHref={crdpHref} idPrefix={pre} />}
+{kind === 'combined' && <VaCalculator client:load mode="combined" methodHref={methodHref} idPrefix={pre} />}
+{kind === 'varates' && <VaCalculator client:load mode="rates" rating={rating ?? 70} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'paychart' && <PayChart client:load grade={grade} years={years} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'pay' && <PayCalculator client:load grade={grade} years={years} zip={zip} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'bah' && <BahCalculator client:load grade={grade} zip={zip} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'bahtable' && <BahTable client:load idPrefix={pre} />}
+{kind === 'retire' && <RetireCalculator client:load grade={grade} years={years} plan={plan} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'crdp' && <RetireCalculator client:load mode="crdp" grade={grade} years={years} plan={plan} rating={rating ?? 50} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'fers' && <FersCalculator client:load methodHref={methodHref} idPrefix={pre} />}
+{kind === 'gi' && <GiCalculator client:load zip={zip} methodHref={methodHref} idPrefix={pre} />}
+{kind === 'tsp' && <TspCalculator client:load grade={grade} years={years} methodHref={methodHref} idPrefix={pre} />}

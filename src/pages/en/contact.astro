@@ -1,0 +1,27 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import LegalIdentity from '../../components/LegalIdentity.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, REVIEW_CYCLE_MONTHS, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { contactPageSchema } from '../../lib/seo';
+const lang = 'en';
+const description = 'Write to us when an award letter, an LES or a DFAS retiree statement differs from a result here, when a table changes, or to embed the VA or BAH calculator.';
+---
+<PageLayout title={`Contact ${SITE_NAMES[lang]}: corrections and embedding`} description={description} lang={lang} noindex={true} jsonLd={[contactPageSchema({ name: 'Contact', description, path: route('contact', lang), lang })]} breadcrumbs={[{ label: 'Contact' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h1>Contact</h1>
+    <p>One mailbox, read on working days: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>Your payment differs from our estimate</h2>
+    <p>Send the share link of your calculation and the amount on the document you hold: the VA award letter or the payment history on va.gov, your Leave and Earnings Statement, or your retiree account statement from DFAS. The usual causes are a dependent VA has not added yet (a marriage or a birth that was never reported on VA Form 21-686c), a child who turned 18 and was not certified as a student, a rating with a future effective date, BAH rate protection from an earlier year, or a VA waiver that DFAS has not yet adjusted. We tell you which one, and fix the site if the error is ours.</p>
+    <h2>A table changed</h2>
+    <p>VA applies its cost-of-living adjustment every December 1, DFAS and the DTMO publish new pay and BAH tables for January 1, the GI Bill rates turn over on August 1 and the IRS sets TSP limits in November. If you see an official change we have not picked up, send the link to the government page.</p>
+    <h2>Embedding</h2>
+    <p>Veterans service organizations, county service officers, transition offices and spouse groups can place the VA calculator or the BAH lookup on their sites for free: the code is on the <a href={route('widget', lang)}>embed page</a>.</p>
+    <h2>What we cannot do</h2>
+    <p>We cannot read your claim, file anything for you or contact VA or DFAS on your behalf. An accredited veterans service officer can help with a claim at no cost; VA lists them on va.gov.</p>
+    <h2>Response time</h2><p>Usually within five working days, corrections first. Every figure is re-read at least every {REVIEW_CYCLE_MONTHS} months and on each scheduled change.</p>
+    <h2>Publisher</h2>
+    <LegalIdentity lang={lang} />
+    <p>Content owner: {AUTHOR_NAME}. See the <a href={route('terms', lang)}>legal notice</a>. Updated: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

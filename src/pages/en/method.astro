@@ -1,0 +1,48 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema, webPageSchema } from '../../lib/seo';
+import { P, usd, usdx, day, pct, comp, MHAS } from '../../lib/kit';
+import { table, ext, SOURCES } from '../../lib/helpers';
+const lang = 'en';
+const title = 'VA and Military Pay Method 2026: Formulas, Sources, Limits';
+const description = 'How the 2026 VA disability, combined rating, military pay, BAH, retirement, CRDP, GI Bill and TSP calculators apply VA, DFAS, DTMO, IRS and OPM rules, and their limits.';
+const path = route('method', lang);
+const srcRows = Object.entries(SOURCES).map(([, s]) => [s.label, ext(s.url, new URL(s.url).hostname.replace(/^www\./, ''))]);
+const nMha = MHAS.filter((m) => m.w).length;
+---
+<PageLayout title={title} description={description} lang={lang} jsonLd={[webPageSchema({ name: 'How we calculate', description, path, lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'How we calculate', path }])]} breadcrumbs={[{ label: 'How we calculate' }]}>
+  <header class="mb-6"><h1 class="font-serif text-3xl font-bold text-navy-900 md:text-4xl">How the calculators work</h1>
+  <p class="mt-3 text-lg text-navy-700">Official documents kept with the code, a script that turns them into data files, small functions that apply the law in your browser, and tests that rebuild the government's own tables before every release.</p></header>
+  <div class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h2>Combined VA rating</h2>
+    <p>Ratings are sorted from the most to the least severe. Each step combines the value reached so far with the next rating: value + rating × (100 − value) ÷ 100, rounded to the nearest whole number with halves going up. That single line reproduces every one of the 684 cells of Table I in 38 CFR 4.25 as published on the eCFR; the test suite checks all of them on each build. The final value is converted once to the nearest multiple of 10, with values ending in 5 rounded up (65 becomes 70, 64 becomes 60), exactly as 4.25(a) and (b) require. Ratings of 0% are left out because they are not compensable.</p>
+    <h2>Bilateral factor</h2>
+    <p>When disabilities of both arms or both legs (or paired skeletal muscles) are rated, the engine combines them, adds 10% of that combined value without combining it, rounds to a whole number and treats the result as one disability in the order of severity, as 38 CFR 4.26 describes: 10% and 10% on both legs become 21, and with 60% and 20% the final rating is 70%, the example of the regulation itself, which is a test. The factor applies only when each side of a pair has a compensable rating. Under 4.26(d), the engine also tries leaving each bilateral disability out of the factor and keeps the most favorable result.</p>
+    <h2>Monthly compensation</h2>
+    <p>Amounts come from the va.gov tables effective {day(P.va.ratesEffective)}, after the {pct(P.va.colaPct)} cost-of-living adjustment ({usdx(comp(10))} at 10%, {usdx(comp(100))} at 100% for a veteran alone). At 10% and 20% one rate applies whatever the family. From 30%, the engine picks the basic rate for the veteran's spouse, dependent parents and one child under 18, then adds each further child under 18, each child aged 18 to 23 in an approved school, and the Aid and Attendance amount for a spouse who needs it. A child in school is paid at the school amount in place of the child amount (38 U.S.C. 1115(1)(F) says "notwithstanding"), so a veteran whose only child is in college gets the rate without children plus the school amount. The two examples printed by VA (70% with a spouse on Aid and Attendance and three young children: $2,367.45; SMC-L with four children: $6,053.32) are reproduced to the cent.</p>
+    <h2>Individual unemployability and SMC</h2>
+    <p>The calculator flags the schedular threshold of 38 CFR 4.16(a): one disability at 60%, or a combined 70% with one disability at 40%, counting bilateral disabilities as one. It does not judge employability, which is VA's decision. Special monthly compensation rates are read from the SMC page of va.gov for the same date; SMC-K ({usdx(P.va.smcK)}) is added to the levels that accept it.</p>
+    <h2>Basic pay, BAS and BAH</h2>
+    <p>Basic pay is the DFAS table effective {day(P.pay.effective)} ({pct(P.pay.raisePct)} raise), for 27 grades including O-1E to O-3E, and 22 seniority columns. The column follows completed years of service: four years and a day is "over 4". Blank cells of the DFAS table (an E-9 with three years, for example) are reported as such, and the calculators then show the first rate of the grade with a note. Officer rates printed by DFAS already include the Executive Schedule caps of 2026. BAS is {usdx(P.pay.bas.enlisted)} for enlisted members and {usdx(P.pay.bas.officer)} for officers. BAH comes from the DTMO 2026 ASCII files: {nMha} military housing areas with a rate, {P.bah.zips.toLocaleString('en-US')} ZIP codes mapped to them, a rate with dependents and one without for each grade. Rate protection, partial BAH, BAH-Diff and overseas housing allowance are not modeled.</p>
+    <h2>Retired pay</h2>
+    <p>Gross retired pay = retired pay base × multiplier (10 U.S.C. 1409): 2.5% a year under High-3, 2.0% under the Blended Retirement System, and under REDUX 2.5% a year minus one point for each year short of 30, recomputed with the full multiplier at 62. Months count as twelfths of a year, and the multiplier stops at 40 years. When you do not enter your own high-36 average, the calculator uses the 2026 basic pay of your grade one year before your retirement seniority as an approximation, which overstates slightly for someone retiring now (the average reaches back three years) and is said on the result. COLA: {pct(P.retire.colaPct)} on {day(P.retire.colaEffective)}, CPI minus one point for REDUX.</p>
+    <h2>CRDP, VA waiver and CRSC</h2>
+    <p>VA compensation reduces retired pay dollar for dollar (38 U.S.C. 5304 and 5305). CRDP restores it in full for a retiree with 20 or more years and a combined rating of 50% or more (10 U.S.C. 1414; the phase-in ended on December 31, 2013). A Chapter 61 disability retiree with 20 years gets back only up to the retired pay that longevity alone would give, and one with fewer than 20 years gets no CRDP. CRSC (10 U.S.C. 1413a) pays, tax free, the VA amount of the combat-related part of the rating, capped at the waived retired pay; the calculator uses the same dependents for that part, which is an estimate, since the branch's CRSC board decides which disabilities are combat-related. DFAS pays the more favorable of CRDP and CRSC, never both, and the calculator does the same.</p>
+    <h2>SBP and FERS</h2>
+    <p>Survivor Benefit Plan: annuity 55% of the base amount (10 U.S.C. 1451), premium 6.5% of the base amount for members who joined after March 1, 1990 (10 U.S.C. 1452). FERS: 1% of the high-3 salary per year of service, 1.1% for an annuity starting at 62 or later with 20 years, minus 5% a year under 62 for an MRA+10 retirement (OPM). Military years count only after the deposit, 3% of the military basic pay earned for service after 2000; the deposit is shown before interest.</p>
+    <h2>GI Bill and TSP</h2>
+    <p>Post-9/11 GI Bill rates for August 1, 2026 to July 31, 2027: net in-state tuition at a public school, up to {usdx(P.gi.privateCap)} at a private or foreign school, housing allowance equal to the E-5 with-dependents BAH of the campus ZIP code (half the national average, {usd(P.gi.onlineMha)}, for online-only study), books {usdx(P.gi.bookPerCredit)} a credit up to {P.gi.bookCredits} credits, all multiplied by the eligibility tier; the housing allowance is also multiplied by the rate of pursuit rounded to the nearest tenth and stops at half time. TSP: IRS 2026 limits ({usd(P.tsp.elective)} of employee contributions, {usd(P.tsp.catchUp)} catch-up from 50, {usd(P.tsp.catchUp6063)} from 60 to 63, {usd(P.tsp.annualAdditions)} for all sources) and the BRS service contributions: 1% automatic plus 100% of the first 3% and 50% of the next 2%. Projections use the return you choose; past TSP returns say nothing about future ones.</p>
+    <h2>What the calculators do not do</h2>
+    <ul>
+      <li>They do not file a claim, read your VA file or predict a rating; a rating decision can be appealed through VA, with or without a representative.</li>
+      <li>They do not compute taxes on basic pay or retired pay, special and incentive pays, reserve retirement points or the BRS lump sum.</li>
+      <li>They show the latest official figure with its date when a newer one has not been published.</li>
+    </ul>
+    <h2>Tests</h2>
+    <p>Every engine is a pure function tested on each build: the 684 cells of Table I, the examples of 4.25 and 4.26, the worked examples of va.gov, DFAS cells for enlisted, warrant and officer grades, every 97th ZIP code of the DTMO file, the DFAS concurrent receipt example ($800 of retired pay at 50%), and the statutory formulas of SBP, FERS, the GI Bill and the TSP. A failing test blocks publication.</p>
+    <h2>Every source</h2>
+    <Fragment set:html={table(['Document', 'Site'], srcRows, `Read on ${day(P.retrieved_at)}. dfas.mil and travel.dod.mil refuse connections from outside the United States; their 2026 tables were read on the Internet Archive copies and are kept with the code.`, ['l', 'l'])} />
+    <p>Questions or corrections: <a href={route('contact', lang)}>contact page</a>. See also the <a href={route('editorial', lang)}>editorial policy</a>.</p>
+  </div>
+</PageLayout>

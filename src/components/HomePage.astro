@@ -1,0 +1,65 @@
+---
+/**
+ * Home, in its own order for this subject (RECETTE §6.6, rule 2): the VA calculator first (ratings,
+ * dependents, retired pay in one form), the folded answer, the 2026 rating ladder (monthly amount for each
+ * rating and three family situations), three worked cases computed by the engine, the four other tool
+ * families as a numbered index, the long text in accordions, then the FAQ. Text: src/content/home.ts.
+ */
+import PageLayout from '../layouts/PageLayout.astro';
+import Clamp from './Clamp.astro';
+import Tool from './Tool.astro';
+import { HOME } from '../content/home';
+import { route, ROUTES } from '../i18n/routes';
+import { helpers, SOURCES } from '../lib/helpers';
+import { PAGES } from '../lib/pages';
+import { GROUPS } from '../lib/topics';
+import { RATINGS, comp, usdx, day, P } from '../lib/kit';
+import { faqSchema, organizationSchema, websiteSchema, webPageSchema, webApplicationSchema } from '../lib/seo';
+import { LAST_UPDATED } from '../data/site-config';
+const lang = 'en';
+const x = HOME;
+const path = route('home', lang);
+const h = helpers();
+const sources = x.sources.map((k) => ({ name: SOURCES[k].label, url: SOURCES[k].url }));
+const jsonLd = [websiteSchema(lang), organizationSchema(lang), webPageSchema({ name: x.h1, description: x.description, path, lang }), webApplicationSchema({ name: x.h1, description: x.description, path, lang }), faqSchema(x.faqs, lang)];
+const has = (id: string) => ROUTES.some((r) => r.id === id);
+const rid = (r: number) => `va-${r}-percent`;
+const ladder = RATINGS.map((r) => [
+  has(rid(r)) ? `<a href="${route(rid(r), lang)}"><strong>${r}%</strong></a>` : `<strong>${r}%</strong>`,
+  usdx(comp(r)),
+  r >= 30 ? usdx(comp(r, { spouse: true })) : 'same',
+  r >= 30 ? usdx(comp(r, { spouse: true, kids: 2 })) : 'same',
+]);
+const cases = x.cases(h);
+const families = GROUPS.filter((g) => g.id !== 'va').map((g) => ({ g, pages: PAGES.filter((p) => p.group === g.id && p.kind === 'pillar') }));
+const sections = x.sections(h);
+---
+<PageLayout title={x.title} description={x.description} lang={lang} jsonLd={jsonLd} faqs={x.faqs} sources={sources}>
+  <h1 class="font-serif text-3xl font-bold text-navy-900 md:text-4xl">{x.h1}</h1>
+  <p class="mt-3 text-lg text-navy-700">{x.intro}</p>
+  <p class="mt-2 mb-6 text-sm text-navy-600">VA rates effective {day(P.va.ratesEffective)}, DFAS and DTMO 2026 tables, checked <time datetime={LAST_UPDATED}>{day(LAST_UPDATED)}</time> · <a href={route('method', lang)} class="underline">How we calculate</a> · <a href={route('about', lang)} class="underline">About this site</a></p>
+  <div data-outil><Tool kind="va" idPrefix="home" /></div>
+  <Clamp text={x.resume} lang={lang} id="clamp-home" sentences={2} class="my-8" />
+  <figure class="not-prose my-10">
+    <figcaption class="mb-2 font-serif text-2xl font-bold text-navy-900">{x.ladderTitle}</figcaption>
+    <p class="mb-3 text-navy-800" set:html={x.ladderIntro(h)} />
+    <Fragment set:html={h.table(['Rating', 'Veteran alone', 'With spouse', 'Spouse and 2 children'], ladder, 'Monthly VA compensation, rates effective December 1, 2025 (va.gov). Each rating opens its own page.', ['l', 'r', 'r', 'r'])} />
+  </figure>
+  <section class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h2>{x.casesTitle}</h2>
+  </section>
+  <div class="mt-4 grid gap-6 md:grid-cols-3">
+    {cases.map((c) => <article class="border-t-2 border-accent-500 pt-3"><h3 class="font-serif text-lg font-bold text-navy-900">{c.title}</h3><p class="tabular-nums mt-1 text-2xl font-bold text-accent-700">{c.figure}</p><div class="mt-2 text-sm text-navy-800" set:html={c.html} /></article>)}
+  </div>
+  <section class="prose prose-slate mt-10 max-w-none prose-headings:font-serif">
+    <h2>{x.familiesTitle}</h2>
+    <Fragment set:html={x.familiesIntro(h)} />
+  </section>
+  <ol data-chrome class="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+    {families.map(({ g, pages }, i) => <li class="border-l-2 border-navy-200 pl-4"><p class="text-xs font-semibold uppercase tracking-wide text-navy-600">{String(i + 1).padStart(2, '0')} · {g.label}</p>{pages.map((p) => <p class="mt-1"><a href={route(p.id, lang)} class="font-serif text-lg font-semibold text-accent-700 hover:underline">{p.nav}</a> <span class="text-sm text-navy-700">{p.card}</span></p>)}</li>)}
+  </ol>
+  <section class="prose prose-slate mt-10 max-w-none prose-headings:font-serif">
+    <h2>{x.foldTitle}</h2>
+    {sections.map((s) => <details class="fold not-prose"><summary><h3 class="fold-h">{s.title}</h3></summary><div class="prose prose-slate max-w-none pb-4"><Fragment set:html={s.html} /></div></details>)}
+  </section>
+</PageLayout>

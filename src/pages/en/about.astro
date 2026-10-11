@@ -1,0 +1,30 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { LAST_UPDATED, AUTHOR_NAME, CONTACT_EMAIL, AUTHOR_ROLE, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { personSchema, organizationSchema, breadcrumbSchema, profilePageSchema } from '../../lib/seo';
+import { displayDate } from '../../lib/format';
+import { P, usdx, comp, day, MHAS } from '../../lib/kit';
+const lang = 'en';
+const nMha = MHAS.filter((m) => m.w).length;
+---
+<PageLayout title="Radif Partners and VA & Military Pay Calc: Sources, Fixes" description="Who publishes this VA disability, military pay, BAH and retirement calculator, which VA, DFAS and DTMO documents feed it in 2026, how it is funded and how errors get fixed." lang={lang} jsonLd={[personSchema(lang), organizationSchema(lang), profilePageSchema({ path: route('about', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'About', path: route('about', lang) }])]} breadcrumbs={[{ label: 'About' }]}>
+  <header class="mb-6"><h1 class="font-serif text-3xl font-bold text-navy-900 md:text-4xl">About {SITE_NAMES[lang]}</h1></header>
+  <div class="prose prose-slate max-w-none prose-headings:font-serif">
+    <div class="not-prose mb-6"><p class="text-lg font-semibold text-navy-900">{AUTHOR_NAME}</p><p class="text-navy-700">{AUTHOR_ROLE[lang]}</p></div>
+    <p>{SITE_NAMES[lang]} is published by Radif Partners, a company that turns official tables into calculators people can use without a login. This site is for the people who read a VA rating decision, a Leave and Earnings Statement or a retiree account statement and want to know whether the number on it is right, and what the next rating, the next promotion or the next duty station would change.</p>
+    <h2>Why this site does better than the first search result</h2>
+    <p>For "VA disability rates", the first result is va.gov itself: accurate tables, but no calculator. A veteran with three ratings has to find the combined value in Table I of 38 CFR 4.25, round it, look up the basic rate for the family, then add each extra child by hand. Here the combined rating, the monthly amount with every kind of dependent and, for a retiree, the effect on retired pay come out of one form, with the same official figures: {usdx(comp(100))} a month at 100% for a veteran alone, {usdx(comp(70, { spouse: true, kids: 1 }))} at 70% with a spouse and a child, from {day(P.va.ratesEffective)}. The calculators that rank next either stop at the rating, or belong to law firms that ask for your phone number. We ask for nothing.</p>
+    <h2>What the site covers</h2>
+    <p>VA compensation, special monthly compensation, the Veterans Pension and DIC; the 2026 basic pay tables of DFAS and the subsistence allowance; the housing allowance of all {nMha} military housing areas in the DTMO 2026 file; retired pay under High-3, REDUX and the Blended Retirement System, concurrent receipt (CRDP and CRSC), the Survivor Benefit Plan and the FERS military buy-back; the Post-9/11 GI Bill for the 2026-27 school year and the 2026 TSP limits.</p>
+    <h2>What we do not do</h2>
+    <p>We are not VA, DoD or DFAS, and we cannot see your file. We do not file claims, we do not refer anyone to an attorney, a claims consultant or a lender, and no one pays us to be mentioned. When the result depends on a decision only VA or your branch can make, such as whether a disability is combat-related for CRSC, the calculator asks you for that decision instead of guessing it.</p>
+    <h2>How the figures are produced</h2>
+    <p>The raw documents (VA rate pages, DFAS tables, the DTMO ASCII files, the eCFR text of 38 CFR 4.25) are kept with the code, and a script turns them into the data files the calculators read. The rating engine reproduces all 684 cells of the official combined ratings table; the compensation engine reproduces the worked examples printed on va.gov to the cent. Details and limits are on the <a href={route('method', lang)}>method page</a>.</p>
+    <h2>Funding</h2>
+    <p>The site is free and has no account. If advertising appears one day, it will never sit above a calculator and will never see what you type, because nothing you type leaves your browser.</p>
+    <h2>Reporting a mistake</h2>
+    <p>If your award letter, your LES or a DFAS statement shows a different amount, write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> with the share link of your calculation. A confirmed error is fixed in the data, turned into a test and dated. See also the <a href={route('editorial', lang)}>editorial policy</a> and the <a href={route('terms', lang)}>legal notice</a>.</p>
+    <p class="text-sm text-navy-600">Figures last checked on <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time>.</p>
+  </div>
+</PageLayout>

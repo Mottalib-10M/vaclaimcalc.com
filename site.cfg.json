@@ -1,0 +1,68 @@
+{
+ "legalCountry": "France",
+ "registerLabel": "SIREN",
+ "vatLabel": "VAT",
+ "jurisdiction": "France",
+ "supervisoryAuthority": "Commission nationale de l'informatique et des libertés (CNIL)",
+ "supervisoryAuthorityUrl": "https://www.cnil.fr",
+ "consentMode": "none",
+ "year": 2026,
+ "founded": "2026",
+ "volumes": "/Users/mottalib/Documents/GitHub/reports/volumes-2026-10-10b/topic-us-military-va.csv",
+ "volumesNote": "Environ 318 000 recherches/mois mesurées au Keyword Planner (plan US 1441667700), hors « va disability rates/calculator » non chiffrés ; site validé par l'éditeur le 2026-10-11.",
+ "folder": "us-military-va",
+ "outDir": "a-publier/Mottalib-10M",
+ "url": "https://us-military-va.example",
+ "locales": [
+  "en"
+ ],
+ "names": {
+  "en": "VA & Military Pay Calc"
+ },
+ "langTags": {
+  "en": "en-US"
+ },
+ "ogLocales": {
+  "en": "en_US"
+ },
+ "localeTag": "en-US",
+ "currency": "USD",
+ "flag": "us",
+ "symbol": "VA%",
+ "accent": "#5B6B2F",
+ "authorRole": {
+  "en": "Publisher of the VA disability, military pay, BAH and retirement calculators"
+ },
+ "authorDesc": {
+  "en": "(rewritten in src/data/site-config.ts)"
+ },
+ "email": "contact@us-military-va.example",
+ "indexnow": "7c1e9a4f2b8d4e6a9f3c5b7d1e2a4c6f",
+ "shortName": "VA & Mil Pay",
+ "description": "VA disability calculator with the 2026 rates and dependents, 2026 military pay chart, BAH by ZIP code, military retirement, CRDP, GI Bill and TSP calculators.",
+ "port": 4408,
+ "og": [
+  {
+   "file": "og-en.png",
+   "title": "VA & Military Pay Calc",
+   "subtitle": "",
+   "badge": "2026",
+   "brand": "VA & Military Pay Calc"
+  }
+ ],
+ "lastUpdated": "2026-10-11",
+ "knowsAbout": {
+  "en": [
+   "VA disability compensation rates",
+   "VA combined ratings (38 CFR 4.25)",
+   "Bilateral factor (38 CFR 4.26)",
+   "Military basic pay tables",
+   "Basic Allowance for Housing",
+   "Military retirement (High-3, BRS, REDUX)",
+   "Concurrent Retirement and Disability Pay",
+   "Combat-Related Special Compensation",
+   "Post-9/11 GI Bill",
+   "Thrift Savings Plan"
+  ]
+ }
+}
