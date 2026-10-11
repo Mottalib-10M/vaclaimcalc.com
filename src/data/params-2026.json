@@ -93,7 +93,9 @@
     "brsStart": "2018-01-01",
     "high3Start": "1980-09-08",
     "sbpPct": 55,
-    "sbpPremiumPct": 6.5
+    "sbpPremiumPct": 6.5,
+    "cspBonus": 30000,
+    "sbpMinBase": 300
   },
   "tsp": {
     "elective": 24500,
@@ -282,6 +284,18 @@
     "dtmoComponents": {
       "url": "https://www.travel.dod.mil/Portals/119/Documents/BAH/PDF_BAH-Rate-Component-Breakdown/2026-BAH-Rate-Component-Breakdown.pdf",
       "label": "Defense Travel Management Office, 2026 BAH component breakdown (rent and utilities by housing area, 5% member cost sharing)"
+    },
+    "dfasRedux": {
+      "url": "https://www.dfas.mil/RetiredMilitary/plan/estimate/csbredux/",
+      "label": "DFAS, CSB/REDUX retirement plan: multiplier reduction, COLA minus 1%, recomputation at 62"
+    },
+    "dfasBrs": {
+      "url": "https://www.dfas.mil/RetiredMilitary/newsevents/newsletter/June2025-Understanding-the-Blended-Retirement-System/",
+      "label": "DFAS, Understanding the Blended Retirement System (pension, TSP, lump sum option), June 2025"
+    },
+    "dfasSbp": {
+      "url": "https://www.dfas.mil/RetiredMilitary/provide/sbp/",
+      "label": "DFAS, Survivor Benefit Plan"
     }
   }
 }
