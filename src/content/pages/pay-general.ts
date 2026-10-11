@@ -37,7 +37,7 @@ ${h.table(['Years', ...G], Y.map((y) => [colLabel(colIndex(y)), ...G.map((g) => 
 <h2>Grade titles</h2>
 <p>O-7 is brigadier general in the Army, Air Force, Marine Corps and Space Force, and rear admiral lower half in the Navy and Coast Guard. O-8 is major general or rear admiral. O-9 is lieutenant general or vice admiral, O-10 general or admiral. The grades O-9 and O-10 are tied to positions designated by the President and confirmed by the Senate. The ${h.a('pay-field-grade', 'O-4 to O-6 page')} covers the grades below, and the ${h.a('military-pay-chart', '2026 pay chart')} every grade of the table.</p>
 <p>For the same reason, a pay raise voted for the military does not always reach general and flag officers in full: when the Executive Schedule rises less than the military table, the capped grades gain only what the Executive Schedule gains, and the gap between uncapped and paid amounts widens.</p>
-<p>One consequence is easy to miss: in 2026 a long-serving O-7 and an O-10 can draw basic pay only a few hundred dollars apart, or the same amount once the O-7 is promoted to O-8 with enough years, while their duties differ enormously. Pay at this level is a matter of law and positions, not of the seniority columns.</p>`,
+<p>One consequence is easy to miss: in 2026 a long-serving O-7 and an O-10 draw basic pay only ${usdx(CAP_O7 - steps('O-7').top)} a month apart, and the same amount once the O-7 is promoted to O-8 with enough years, while their duties differ enormously. Pay at this level is a matter of law and positions, not of the seniority columns.</p>`,
   related: ['pay-field-grade', 'military-pay-chart', 'military-retirement-calculator', 'pay-junior-officer'],
   sources: ['dfasOfficer', 'usc1409'],
 });
