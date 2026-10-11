@@ -1,0 +1,44 @@
+import { definePage } from '../../lib/page-types';
+import { P, pay, tspLimit, brsMatch, usd } from '../../lib/kit';
+
+const T = P.tsp;
+const months = (g: string, y: number, c: number) => { const m = (pay(g, y) * c) / 100; return m > 0 ? Math.ceil(T.elective / m) : Infinity; };
+
+export default definePage({
+  id: 'tsp-contribution-limits',
+  group: 'edu',
+  kind: 'guide',
+  order: 50,
+  slug: 'tsp-contribution-limits',
+  nav: 'TSP limits 2026',
+  card: 'The 2026 TSP limits: elective deferral, catch-up by age, the annual additions limit and combat-zone pay',
+  title: 'TSP Contribution Limits 2026: $24,500, Catch-Up, Combat Zone'.replace('$24,500', usd(T.elective)),
+  description: `TSP contribution limits 2026: ${usd(T.elective)} of employee contributions, ${usd(T.catchUp)} catch-up from 50, ${usd(T.catchUp6063)} at ages 60 to 63, and ${usd(T.annualAdditions)} in total with combat-zone pay.`,
+  h1: 'TSP contribution limits for 2026',
+  intro: 'The four limits that apply to the Thrift Savings Plan in 2026, set by the IRS, and how they work for service members who also receive matching or tax-free combat-zone pay.',
+  resume: `For 2026, the IRS set the elective deferral limit, which caps employee contributions to the TSP, traditional and Roth together, at ${usd(T.elective)}, up from ${usd(T.elective2025)} in 2025. Participants who turn 50 or older during the year can add ${usd(T.catchUp)} of catch-up contributions, and those who turn 60, 61, 62 or 63 can add ${usd(T.catchUp6063)} instead, under a SECURE 2.0 rule. The annual additions limit, which counts every source of money including service matching and tax-exempt combat-zone contributions but not catch-up, is ${usd(T.annualAdditions)}. A new rule took effect on January 1, 2026: participants whose wages in the previous year exceeded ${usd(T.rothCatchUpWageThreshold)}, adjusted for inflation, must make catch-up contributions as Roth, and service members contributing from tax-exempt combat-zone pay must make catch-up as Roth regardless of income. Members under the Blended Retirement System should spread contributions over the year: reaching the limit early stops the match for the remaining months.`,
+  mini: 'tspLimit',
+  faqs: [
+    { q: 'What is the TSP catch-up limit for 2026?', a: `${usd(T.catchUp)} for participants who turn 50 or older in 2026, and ${usd(T.catchUp6063)} for those who turn 60, 61, 62 or 63 during the year. From age 64 the regular catch-up amount applies again. Catch-up contributions do not count toward the annual additions limit and are not matched beyond the 5% match on basic pay.` },
+    { q: 'Do service matching contributions count toward the $24,500 limit?'.replace('$24,500', usd(T.elective)), a: `No. The elective deferral limit of ${usd(T.elective)} covers only your own traditional and Roth contributions. Service automatic and matching contributions count toward the higher annual additions limit of ${usd(T.annualAdditions)}, together with your contributions and any tax-exempt combat-zone money, so the match never uses up your own room.` },
+    { q: 'How does combat-zone pay change the TSP limit?', a: `Traditional contributions from tax-exempt pay earned in a combat zone do not count toward the elective deferral limit, so a deployed member can contribute beyond ${usd(T.elective)}, up to the annual additions limit of ${usd(T.annualAdditions)}. Those contributions go to the traditional balance as tax-exempt money; their earnings are taxable when withdrawn. Roth contributions from combat-zone pay still count toward the elective limit.` },
+    { q: 'Why should BRS members avoid maxing out the TSP early in the year?', a: 'Because the service match is paid only in the pay periods when you contribute. If you reach the elective limit in September, you receive no match for October to December. Members who want to contribute the maximum should set a percentage that spreads it over twelve months, or rely on spillover to catch-up contributions after age 50.' },
+  ],
+  body: (h) => `
+<h2>The 2026 limits at a glance</h2>
+${h.table(['Limit', '2026', 'What it covers'], [['Elective deferral', usd(T.elective), 'Your traditional and Roth contributions'], ['Catch-up, age 50 and over', usd(T.catchUp), 'Extra employee contributions'], ['Catch-up, ages 60 to 63', usd(T.catchUp6063), 'Replaces the regular catch-up in those years'], ['Annual additions', usd(T.annualAdditions), 'All sources except catch-up, including matching and combat-zone money']], 'IRS cost-of-living adjustments for 2026; Thrift Savings Plan contribution limits page.', ['l', 'r', 'l'])}
+${h.table(['Age during 2026', 'Most you can contribute yourself'], [[35, '35 or under 50'], [55, '50 to 59'], [61, '60 to 63'], [65, '64 and over']].map(([a, l]) => [l as string, usd(tspLimit(a as number).total)]), 'Employee contributions, elective deferral plus the catch-up for the age.', ['l', 'r'])}
+<h2>Spreading contributions to keep the match</h2>
+<p>Under the Blended Retirement System, the service match is computed each pay period on basic pay. A member who contributes a high percentage reaches the elective limit before the end of the year and then receives no match for the remaining months. With the 2026 limit, an O-5 with eighteen years contributing 25% of basic pay would reach ${usd(T.elective)} in about ${months('O-5', 18, 25)} months, losing the match for the rest of the year; the same member at 15% would contribute through most of the year. Members aged 50 and over have a safety valve: contributions above the elective limit spill over into catch-up automatically. Enlisted members rarely reach the limit from basic pay alone: an E-5 with six years contributing 10% would need ${months('E-5', 6, 10) === Infinity ? 'many' : months('E-5', 6, 10)} months.</p>
+<h2>The new Roth catch-up rule</h2>
+<p>From 2026, participants whose wages in the previous year were above ${usd(T.rothCatchUpWageThreshold)}, adjusted each year, must make their catch-up contributions as Roth: the money is taxed now and comes out tax free later if the rules are met. The switch is automatic for most participants, and the first Roth catch-up contribution creates a Roth balance if there is none. Members in a combat zone who contribute catch-up from tax-exempt pay must use Roth whatever their income. The rule does not affect regular contributions up to the elective limit, which can still be traditional or Roth.</p>
+<h2>Combat-zone pay and the annual additions limit</h2>
+<p>Deployment changes the arithmetic. Traditional contributions from pay excluded from income in a combat zone do not count against the elective deferral limit, so a member deployed for part of the year can save more than ${usd(T.elective)} in total, up to the annual additions limit of ${usd(T.annualAdditions)}, which also counts the service's automatic and matching contributions. This money keeps its tax-exempt character: it is not taxed when withdrawn, though its earnings are. Members who deploy often use these months to save heavily.</p>
+<h2>What changed from 2025</h2>
+<p>The elective deferral limit rose by ${usd(T.elective - T.elective2025)} for 2026, the regular catch-up by ${usd(T.catchUp - T.catchUp2025)} and the overall limit by ${usd(T.annualAdditions - T.annualAdditions2025)}, under the cost-of-living adjustments the IRS announces each fall. The higher catch-up for ages 60 to 63, introduced in 2025, stayed at ${usd(T.catchUp6063)}. Participants who set a dollar amount rather than a percentage of pay should update it at the start of each year to use the new room; a percentage election adjusts by itself as pay changes.</p>
+<h2>Several plans in one year</h2>
+<p>The elective deferral limit is per person, not per plan: contributions to a civilian 401(k) and to the TSP in the same year count together, which matters for reservists with civilian jobs and for members who leave the service mid-year. The annual additions limit, by contrast, applies separately to each employer's plan. The ${h.a('tsp-calculator', 'TSP calculator')} projects your balance, and the ${h.a('brs-calculator', 'BRS calculator')} explains the matching that makes 5% the key rate: at that rate the service adds ${brsMatch(5).total}%.</p>
+<p>Excess contributions, those above a limit because of a payroll error or contributions to two plans, should be reported to the TSP or the other plan before April 15 of the following year so that the excess can be returned; left in place, the same money can be taxed twice. Service members with a civilian employer plan, reservists in particular, are the most exposed to this situation, since neither payroll office sees the other's contributions.</p>`,
+  related: ['tsp-calculator', 'brs-calculator', 'military-pay-calculator', 'fers-retirement-calculator', 'military-retirement-calculator'],
+  sources: ['tspLimits', 'irsCola'],
+});

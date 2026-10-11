@@ -104,7 +104,10 @@
     "annualAdditions": 72000,
     "brsAuto": 1,
     "brsMatchMax": 4,
-    "rothCatchUpWageThreshold": 150000
+    "rothCatchUpWageThreshold": 150000,
+    "elective2025": 23500,
+    "catchUp2025": 7500,
+    "annualAdditions2025": 70000
   },
   "gi": {
     "from": "2026-08-01",
@@ -143,7 +146,12 @@
         50
       ]
     ],
-    "minPursuitForMha": 50
+    "minPursuitForMha": 50,
+    "rural": 500,
+    "tutorMonth": 100,
+    "tutorMax": 1200,
+    "testMax": 2000,
+    "entitlementMonths": 36
   },
   "fers": {
     "mult": 1,
@@ -296,6 +304,14 @@
     "dfasSbp": {
       "url": "https://www.dfas.mil/RetiredMilitary/provide/sbp/",
       "label": "DFAS, Survivor Benefit Plan"
+    },
+    "vaGiAbout": {
+      "url": "https://www.va.gov/education/about-gi-bill-benefits/post-9-11/",
+      "label": "VA, Post-9/11 GI Bill: eligibility, 36 months of entitlement, expiration rules"
+    },
+    "vaGiTransfer": {
+      "url": "https://www.va.gov/education/transfer-post-9-11-gi-bill-benefits/",
+      "label": "VA, Transfer your Post-9/11 GI Bill benefits to a spouse or child"
     }
   }
 }
