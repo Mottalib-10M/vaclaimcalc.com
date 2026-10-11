@@ -49,7 +49,7 @@ def pay_table(name):
 
 
 pay = {}
-for f in ['em26.html', 'wo26.html', 'co26.html', 'cofe26.html']:
+for f in ['em26.htm.raw', 'wo26.htm.raw', 'co26.htm.raw', 'cofe26.htm.raw']:
     pay.update(pay_table(f))
 order = ['E-1', 'E-2', 'E-3', 'E-4', 'E-5', 'E-6', 'E-7', 'E-8', 'E-9', 'W-1', 'W-2', 'W-3', 'W-4', 'W-5',
          'O-1E', 'O-2E', 'O-3E', 'O-1', 'O-2', 'O-3', 'O-4', 'O-5', 'O-6', 'O-7', 'O-8', 'O-9', 'O-10']
@@ -102,7 +102,7 @@ assert len(table) == 76
 json.dump(table, open(os.path.join(FIX, 'cfr425.json'), 'w'))
 
 # ---------- va.gov compensation rates (effective December 1, 2025) ----------
-s = open(os.path.join(RAW, 'va-rates.html'), errors='ignore').read()
+s = open(os.path.join(RAW, 'va-rates.htm.raw'), errors='ignore').read()
 t = re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', re.sub(r'<script.*?</script>|<style.*?</style>', '', s, flags=re.S))))
 assert 'Effective December 1, 2025' in t
 num = r'([\d,]+\.\d\d)'

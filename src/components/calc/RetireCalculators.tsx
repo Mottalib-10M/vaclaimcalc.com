@@ -108,13 +108,14 @@ export function GiCalculator({ methodHref = '/en/method/', idPrefix = 'gi', zip 
   const [ph, setPh] = useState('0');
   const [school, setSchool] = useState<'public' | 'private'>('public');
   const [tuition, setTuition] = useState(11000);
-  const [z, setZ] = useState(zip);
+  const [z, setZ] = useState('');
+  const zz = z.length === 5 ? z : zip; // empty field = the example ZIP of the page, shown as placeholder
   const [credits, setCredits] = useState(12);
   const [online, setOnline] = useState('0');
-  useEffect(() => { const u = readParams(window.location.search); setDays(num(u, 'days', 1095)); setPh(str(u, 'ph', '0') === '1' ? '1' : '0'); setSchool(str(u, 'st', 'public') === 'private' ? 'private' : 'public'); setTuition(num(u, 't', 11000)); setZ(str(u, 'z', zip).slice(0, 5)); setCredits(num(u, 'cr', 12)); setOnline(str(u, 'on', '0') === '1' ? '1' : '0'); }, [zip]);
-  useEffect(() => { updateURL({ days, ph: ph === '1' ? 1 : undefined, st: school, t: tuition, z, cr: credits, on: online === '1' ? 1 : undefined }); }, [days, ph, school, tuition, z, credits, online]);
+  useEffect(() => { const u = readParams(window.location.search); setDays(num(u, 'days', 1095)); setPh(str(u, 'ph', '0') === '1' ? '1' : '0'); setSchool(str(u, 'st', 'public') === 'private' ? 'private' : 'public'); setTuition(num(u, 't', 11000)); setZ(str(u, 'z', '').slice(0, 5)); setCredits(num(u, 'cr', 12)); setOnline(str(u, 'on', '0') === '1' ? '1' : '0'); }, [zip]);
+  useEffect(() => { updateURL({ days, ph: ph === '1' ? 1 : undefined, st: school, t: tuition, z: z || undefined, cr: credits, on: online === '1' ? 1 : undefined }); }, [days, ph, school, tuition, z, credits, online]);
   const tier = giTier(days, ph === '1');
-  const code = useMemo(() => (z.length === 5 ? zipToMha(zipIndex(), z) : null), [z]);
+  const code = useMemo(() => zipToMha(zipIndex(), zz), [zz]);
   const bahE5 = code ? bahRate(code, 'E-5', true) : null;
   const r = giBill({ tier, school, tuition, bahE5, credits, online: online === '1', months: 9 });
   const p = idPrefix;
@@ -123,12 +124,12 @@ export function GiCalculator({ methodHref = '/en/method/', idPrefix = 'gi', zip 
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <NumberField id={`${p}-days`} label="Days of active duty after 9/10/2001" value={days} onChange={setDays} unit="days" max={20000} help="1,095 days (36 months) for 100%." />
         <Toggle id={`${p}-ph`} label="Purple Heart or discharged for a service-connected disability?" value={ph} onChange={setPh} options={yn} />
-        <Toggle id={`${p}-st`} label="School" value={school} onChange={(v) => setSchool(v as 'public' | 'private')} options={[{ value: 'public', label: 'Public, in-state' }, { value: 'private', label: 'Private or foreign' }]} />
+        <Toggle id={`${p}-st`} label="School (public: in-state rate)" value={school} onChange={(v) => setSchool(v as 'public' | 'private')} options={[{ value: 'public', label: 'Public' }, { value: 'private', label: 'Private' }]} />
         <NumberField id={`${p}-t`} label="Net tuition and fees per year" value={tuition} onChange={setTuition} unit="$" max={200000} />
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
           <label htmlFor={`${p}-z`} className="mb-1 block text-sm font-medium text-navy-700">Campus ZIP code</label>
-          <input id={`${p}-z`} type="text" inputMode="numeric" maxLength={5} value={z} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
-          <p className="mt-1 text-xs text-navy-500">{code ? `${mhaLabel(code)}: E-5 BAH ${usd(bahE5 ?? 0)}` : z.length === 5 ? 'ZIP not in the DTMO 2026 file' : 'Five digits'}</p>
+          <input id={`${p}-z`} type="text" inputMode="numeric" maxLength={5} value={z} placeholder={`e.g. ${zip}`} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
+          <p className="mt-1 text-xs text-navy-500">{code ? `${mhaLabel(code)}${z.length === 5 ? '' : ' (example)'}: E-5 BAH ${usd(bahE5 ?? 0)}` : 'ZIP not in the DTMO 2026 file'}</p>
         </div>
         <NumberField id={`${p}-cr`} label="Credits per term (12 = full time)" value={credits} onChange={setCredits} unit="cr" max={24} />
         <Toggle id={`${p}-on`} label="Online classes only?" value={online} onChange={setOnline} options={yn} />

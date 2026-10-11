@@ -1,6 +1,6 @@
 import type { Locale } from './routes';
 const en = {
-  updatedOn: 'Figures checked on', editorialPolicy: 'Editorial policy', contactLabel: 'Contact', reviewedBy: 'Checked by',
+  updatedOn: 'Figures last updated on', editorialPolicy: 'Editorial policy', contactLabel: 'Contact', reviewedBy: 'Checked by',
   skipToContent: 'Skip to content', mainNav: 'Main navigation', breadcrumbLabel: 'Breadcrumb', breadcrumbHome: 'Home', menuOpen: 'Open menu',
   faqTitle: 'Questions veterans and service members ask', relatedCalculators: 'Read next', sourcesTitle: 'Official sources for this page', writtenBy: 'Published by',
   asOf: 'VA, DFAS, DTMO, IRS and OPM figures for', lastUpdated: 'read on the official documents on', footerValidated: 'Sources: VA, DFAS, DTMO, 38 CFR, 10 U.S.C., IRS, TSP and OPM',

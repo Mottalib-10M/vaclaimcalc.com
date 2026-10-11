@@ -53,12 +53,13 @@ export function PayChart({ methodHref = '/en/method/', idPrefix = 'pc', grade = 
 export function PayCalculator({ methodHref = '/en/method/', idPrefix = 'mp', grade = 'E-5', years = 4, zip = '23511' }: Common) {
   const [g, setG] = useState(grade);
   const [y, setY] = useState(years);
-  const [z, setZ] = useState(zip);
+  const [z, setZ] = useState('');
+  const zz = z.length === 5 ? z : zip; // empty field = the example ZIP of the page, shown as placeholder
   const [dep, setDep] = useState('1');
-  useEffect(() => { const u = readParams(window.location.search); const gg = str(u, 'g', grade); if (GRADES.includes(gg)) setG(gg); setY(num(u, 'y', years)); setZ(str(u, 'z', zip).slice(0, 5)); setDep(str(u, 'd', '1') === '0' ? '0' : '1'); }, [grade, years, zip]);
-  useEffect(() => { updateURL({ g, y, z, d: dep }); }, [g, y, z, dep]);
+  useEffect(() => { const u = readParams(window.location.search); const gg = str(u, 'g', grade); if (GRADES.includes(gg)) setG(gg); setY(num(u, 'y', years)); setZ(str(u, 'z', '').slice(0, 5)); setDep(str(u, 'd', '1') === '0' ? '0' : '1'); }, [grade, years, zip]);
+  useEffect(() => { updateURL({ g, y, z: z || undefined, d: dep }); }, [g, y, z, dep]);
   const base = basePayOrFirst(g, y).pay;
-  const code = useMemo(() => (z.length === 5 ? zipToMha(zipIndex(), z) : null), [z]);
+  const code = useMemo(() => zipToMha(zipIndex(), zz), [zz]);
   const housing = code ? bahRate(code, g, dep === '1') ?? 0 : 0;
   const food = bas(g);
   const total = base + housing + food;
@@ -69,8 +70,8 @@ export function PayCalculator({ methodHref = '/en/method/', idPrefix = 'mp', gra
         <NumberField id={`${idPrefix}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} />
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
           <label htmlFor={`${idPrefix}-z`} className="mb-1 block text-sm font-medium text-navy-700">Duty station ZIP code</label>
-          <input id={`${idPrefix}-z`} type="text" inputMode="numeric" maxLength={5} value={z} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
-          <p className="mt-1 text-xs text-navy-500">{code ? mhaLabel(code) : z.length === 5 ? 'ZIP not in the DTMO 2026 file' : 'Five digits'}</p>
+          <input id={`${idPrefix}-z`} type="text" inputMode="numeric" maxLength={5} value={z} placeholder={`e.g. ${zip}`} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
+          <p className="mt-1 text-xs text-navy-500">{code ? `${mhaLabel(code)}${z.length === 5 ? '' : ' (example)'}` : 'ZIP not in the DTMO 2026 file'}</p>
         </div>
         <Toggle id={`${idPrefix}-d`} label="With dependents?" value={dep} onChange={setDep} options={yn} />
       </form>
@@ -84,11 +85,12 @@ export function PayCalculator({ methodHref = '/en/method/', idPrefix = 'mp', gra
 
 export function BahCalculator({ methodHref = '/en/method/', idPrefix = 'bah', grade = 'E-5', zip = '92136' }: Common) {
   const [g, setG] = useState(grade);
-  const [z, setZ] = useState(zip);
+  const [z, setZ] = useState('');
+  const zz = z.length === 5 ? z : zip; // empty field = the example ZIP of the page, shown as placeholder
   const [dep, setDep] = useState('1');
-  useEffect(() => { const u = readParams(window.location.search); const gg = str(u, 'g', grade); if (BAH_GRADES.includes(gg)) setG(gg); setZ(str(u, 'z', zip).slice(0, 5)); setDep(str(u, 'd', '1') === '0' ? '0' : '1'); }, [grade, zip]);
-  useEffect(() => { updateURL({ g, z, d: dep }); }, [g, z, dep]);
-  const code = useMemo(() => (z.length === 5 ? zipToMha(zipIndex(), z) : null), [z]);
+  useEffect(() => { const u = readParams(window.location.search); const gg = str(u, 'g', grade); if (BAH_GRADES.includes(gg)) setG(gg); setZ(str(u, 'z', '').slice(0, 5)); setDep(str(u, 'd', '1') === '0' ? '0' : '1'); }, [grade, zip]);
+  useEffect(() => { updateURL({ g, z: z || undefined, d: dep }); }, [g, z, dep]);
+  const code = useMemo(() => zipToMha(zipIndex(), zz), [zz]);
   const rate = code ? bahRate(code, g, dep === '1') : null;
   const other = code ? bahRate(code, g, dep !== '1') : null;
   const rows: Array<[string, string]> = code ? BAH_GRADES.filter((x) => x === g || ['E-1', 'E-4', 'E-5', 'E-6', 'E-7', 'E-9', 'W-2', 'O-1', 'O-3', 'O-4', 'O-5', 'O-6'].includes(x)).map((x) => [`${x}${x === g ? ' (you)' : ''}`, `${usd(bahRate(code, x, true) ?? 0)} with · ${usd(bahRate(code, x, false) ?? 0)} without`]) : [];
@@ -97,8 +99,8 @@ export function BahCalculator({ methodHref = '/en/method/', idPrefix = 'bah', gr
       <form className="grid gap-x-5 gap-y-4 sm:grid-cols-3" onSubmit={(e) => e.preventDefault()}>
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
           <label htmlFor={`${idPrefix}-z`} className="mb-1 block text-sm font-medium text-navy-700">Duty station ZIP code</label>
-          <input id={`${idPrefix}-z`} type="text" inputMode="numeric" maxLength={5} value={z} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
-          <p className="mt-1 text-xs text-navy-500">{code ? `${mhaLabel(code)} (${code})` : z.length === 5 ? 'ZIP not in the DTMO 2026 file' : 'Five digits'}</p>
+          <input id={`${idPrefix}-z`} type="text" inputMode="numeric" maxLength={5} value={z} placeholder={`e.g. ${zip}`} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
+          <p className="mt-1 text-xs text-navy-500">{code ? `${mhaLabel(code)} (${code})${z.length === 5 ? '' : ', example'}` : 'ZIP not in the DTMO 2026 file'}</p>
         </div>
         <SelectField id={`${idPrefix}-g`} label="Pay grade" value={g} onChange={setG} options={GRADE_OPTS} />
         <Toggle id={`${idPrefix}-d`} label="With dependents?" value={dep} onChange={setDep} options={yn} />
