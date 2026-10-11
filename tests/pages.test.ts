@@ -75,7 +75,7 @@ describe.each(pages.map((p) => [p.id, p] as const))('page %s', (_id, p) => {
     minis(html); linksOk(html);
   });
   it('no banned phrase, no em dash', () => clean([p.title, p.description, p.h1, p.intro, p.resume, p.card, ...p.faqs.flatMap((f) => [f.q, f.a]), body(p.body)].join(' ')));
-  it('body length (guides 900+ words of prose outside tables, pillars 400+, rating, grade and location pages 380+ with a table)', () => {
+  it('body length (guides 900+ words of prose outside tables, pillars 400+, rating, grade and location pages 380+ (check-seo counts the whole page: 1,200 words) with a table)', () => {
     const html = body(p.body);
     const n = words(html.replace(/<table[\s\S]*?<\/table>/g, ''));
     expect(n).toBeGreaterThanOrEqual(p.kind === 'pillar' ? 400 : p.kind === 'guide' ? 900 : 380);

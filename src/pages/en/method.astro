@@ -6,7 +6,7 @@ import { P, usd, usdx, day, pct, comp, MHAS } from '../../lib/kit';
 import { table, ext, SOURCES } from '../../lib/helpers';
 const lang = 'en';
 const title = 'VA and Military Pay Method 2026: Formulas, Sources, Limits';
-const description = 'How the 2026 VA disability, combined rating, military pay, BAH, retirement, CRDP, GI Bill and TSP calculators apply VA, DFAS, DTMO, IRS and OPM rules, and their limits.';
+const description = 'How the 2026 VA disability, combined rating, military pay, BAH, retirement, CRDP, GI Bill and TSP calculators apply official rules, with their limits.';
 const path = route('method', lang);
 const srcRows = Object.entries(SOURCES).map(([, s]) => [s.label, ext(s.url, new URL(s.url).hostname.replace(/^www\./, ''))]);
 const nMha = MHAS.filter((m) => m.w).length;

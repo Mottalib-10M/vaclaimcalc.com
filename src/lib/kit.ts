@@ -5,7 +5,8 @@
 import P from '../data/params-2026.json';
 import { combine, combinedValue, compensation, rateCell, aloneRate, RATINGS, type Dependents, NO_DEPS } from './engine/va';
 import { basePay, basePayOrFirst, payRow, bas, GRADES, colLabel, PAY_COLS, CAP_O6, CAP_O7, E1_UNDER_4_MONTHS } from './engine/pay';
-import { bahRate, mhaLabel, MHAS, mhaByCode, BAH_GRADES } from './engine/bah';
+import { bahRate, mhaLabel, MHAS, mhaByCode, BAH_GRADES, decodeZips } from './engine/bah';
+import Z from '../data/zipmha-2026.json';
 import { multiplier, retiredPay, concurrent, sbp, fers, militaryDeposit, colaPct } from './engine/retire';
 import { giTier, giBill, brsMatch, tspLimit, tspProject } from './engine/edu';
 import { usd, usdx, pct, num, day, listOf } from './fmt';
@@ -32,5 +33,13 @@ export function bah(code: string, grade: string, withDependents = true): number 
 }
 /** GI Bill housing allowance (E-5 with dependents) of a list of MHAs, for the giMha mini. */
 export const giAreas = (codes: string[]) => ({ areas: codes.map((c) => [mhaLabel(c), bah(c, 'E-5', true)] as [string, number]) });
-export const KIT = { P, usd, usdx, pct, num, day, listOf, comp, deps, combine, combinedValue, rateCell, aloneRate, basePay, pay, bas, bahRate, mhaLabel, retiredPay, multiplier, concurrent, sbp, fers, giBill, giTier, brsMatch, tspLimit, tspProject, colaPct, bah, bahArg, giAreas, mhaByCode, militaryDeposit };
+const ZI = decodeZips(Z);
+/** ZIP codes of a housing area in the DTMO 2026 file: count, first and last (5 digits). */
+export function zipsOf(code: string) {
+  const i = MHAS.findIndex((m) => m.code === code);
+  const list: string[] = [];
+  ZI.mha.forEach((m, k) => { if (m === i) list.push(String(ZI.zips[k]).padStart(5, '0')); });
+  return { n: list.length, first: list[0], last: list[list.length - 1] };
+}
+export const KIT = { P, usd, usdx, pct, num, day, listOf, comp, deps, combine, combinedValue, rateCell, aloneRate, basePay, pay, bas, bahRate, mhaLabel, retiredPay, multiplier, concurrent, sbp, fers, giBill, giTier, brsMatch, tspLimit, tspProject, colaPct, bah, bahArg, giAreas, mhaByCode, militaryDeposit, zipsOf };
 export type Kit = typeof KIT;
