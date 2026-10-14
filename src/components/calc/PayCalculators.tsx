@@ -34,7 +34,7 @@ export function PayChart({ methodHref = '/en/method/', idPrefix = 'pc', grade = 
   const sel = colIndex(y);
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${idPrefix}-g`} label="Pay grade" value={g} onChange={setG} options={GRADE_OPTS} />
         <NumberField id={`${idPrefix}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} help="Pay entry base date to today, full years only." />
       </form>
@@ -65,7 +65,7 @@ export function PayCalculator({ methodHref = '/en/method/', idPrefix = 'mp', gra
   const total = base + housing + food;
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${idPrefix}-g`} label="Pay grade" value={g} onChange={setG} options={GRADE_OPTS} />
         <NumberField id={`${idPrefix}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} />
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
@@ -96,7 +96,7 @@ export function BahCalculator({ methodHref = '/en/method/', idPrefix = 'bah', gr
   const rows: Array<[string, string]> = code ? BAH_GRADES.filter((x) => x === g || ['E-1', 'E-4', 'E-5', 'E-6', 'E-7', 'E-9', 'W-2', 'O-1', 'O-3', 'O-4', 'O-5', 'O-6'].includes(x)).map((x) => [`${x}${x === g ? ' (you)' : ''}`, `${usd(bahRate(code, x, true) ?? 0)} with · ${usd(bahRate(code, x, false) ?? 0)} without`]) : [];
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-3 lg:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-3 lg:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
           <label htmlFor={`${idPrefix}-z`} className="mb-1 block text-sm font-medium text-navy-700">Duty station ZIP code</label>
           <input id={`${idPrefix}-z`} type="text" inputMode="numeric" maxLength={5} value={z} placeholder={`e.g. ${zip}`} onChange={(e) => setZ(e.target.value.replace(/\D/g, '').slice(0, 5))} className="tabular-nums h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />
@@ -122,7 +122,7 @@ export function BahTable({ idPrefix = 'bt' }: Common) {
   }, [q]);
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <div className="grid grid-rows-subgrid row-span-3 content-start gap-y-0">
           <label htmlFor={`${idPrefix}-q`} className="mb-1 block text-sm font-medium text-navy-700">Search a housing area or state</label>
           <input id={`${idPrefix}-q`} type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Norfolk, TX, Fort…" className="h-12 w-full rounded-lg border border-navy-300 bg-white px-4 text-lg text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20" />

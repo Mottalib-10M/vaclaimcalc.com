@@ -48,7 +48,7 @@ export function RetireCalculator({ methodHref = '/en/method/', idPrefix = 'rt', 
   const p = idPrefix;
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${p}-pl`} label="Retirement system" value={pl} onChange={(v) => setPl(v as Plan)} options={PLANS} />
         <SelectField id={`${p}-g`} label="Grade at retirement" value={g} onChange={setG} options={RET_GRADES} />
         <NumberField id={`${p}-y`} label="Years of service" value={y} onChange={setY} unit="yrs" max={45} help="20 for an active-duty retirement." />
@@ -88,7 +88,7 @@ export function FersCalculator({ methodHref = '/en/method/', idPrefix = 'fe' }: 
   const gain = r.annual - without.annual;
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <NumberField id={`${idPrefix}-h`} label="High-3 average salary" value={h3} onChange={setH3} unit="$/yr" max={500000} help="Highest 3 consecutive years of basic pay." />
         <NumberField id={`${idPrefix}-c`} label="Civilian FERS years" value={civ} onChange={setCiv} unit="yrs" max={50} />
         <NumberField id={`${idPrefix}-mil`} label="Military years bought back" value={mil} onChange={setMil} unit="yrs" max={30} help="Only if you are not drawing military retired pay for them." />
@@ -121,7 +121,7 @@ export function GiCalculator({ methodHref = '/en/method/', idPrefix = 'gi', zip 
   const p = idPrefix;
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <NumberField id={`${p}-days`} label="Days of active duty after 9/10/2001" value={days} onChange={setDays} unit="days" max={20000} help="1,095 days (36 months) for 100%." />
         <Toggle id={`${p}-ph`} label="Purple Heart or discharged for a service-connected disability?" value={ph} onChange={setPh} options={yn} />
         <Toggle id={`${p}-st`} label="School (public: in-state rate)" value={school} onChange={(v) => setSchool(v as 'public' | 'private')} options={[{ value: 'public', label: 'Public' }, { value: 'private', label: 'Private' }]} />
@@ -160,7 +160,7 @@ export function TspCalculator({ methodHref = '/en/method/', idPrefix = 'ts', gra
   const p = idPrefix;
   return (
     <div className="rechner rounded-xl border border-navy-200 bg-white p-4 sm:p-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
-      <form className="grid gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
+      <form className="grid content-start gap-x-5 gap-y-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <SelectField id={`${p}-g`} label="Pay grade" value={g} onChange={setG} options={GRADES.map((x) => ({ value: x, label: x }))} />
         <NumberField id={`${p}-y`} label="Completed years of service" value={y} onChange={setY} unit="yrs" max={45} />
         <NumberField id={`${p}-c`} label="Your contribution" value={pct} onChange={setPct} unit="%" max={100} help="Share of basic pay." />
